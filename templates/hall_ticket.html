@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Examination Hall Ticket</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .ticket {
+            width: 850px;
+            max-width: 100%;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #111827, #2563eb);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: flex;
+            gap: 30px;
+            padding: 35px;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .details h2 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        .row {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 0;
+        }
+
+        .label {
+            width: 150px;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .value {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .seat-box {
+            margin-top: 22px;
+            background: #eff6ff;
+            border: 2px solid #2563eb;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .seat-box small {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .seat-number {
+            font-size: 34px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-top: 5px;
+        }
+
+        .qr-section {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #e5e7eb;
+            padding-left: 25px;
+        }
+
+        .qr-section img {
+            width: 190px;
+            height: 190px;
+            border: 8px solid white;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.15);
+        }
+
+        .qr-section h3 {
+            margin-top: 15px;
+            color: #1e293b;
+        }
+
+        .qr-section p {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .footer {
+            background: #f8fafc;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .dashboard-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .print-btn {
+            background: #111827;
+            color: white;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .ticket {
+                box-shadow: none;
+                width: 100%;
+            }
+
+            .buttons {
+                display: none;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .content {
+                flex-direction: column;
+            }
+
+            .qr-section {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e5e7eb;
+                padding-left: 0;
+                padding-top: 25px;
+            }
+
+            .label {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div>
+
+    <div class="ticket">
+
+        <div class="header">
+            <h1>EXAMINATION HALL TICKET</h1>
+            <p>Automated Examination Hall Allocation and Management System</p>
+        </div>
+
+        <div class="content">
+
+            <div class="details">
+
+                <h2>Student Examination Details</h2>
+
+                <div class="row">
+                    <div class="label">Register No</div>
+                    <div class="value">{{ student[1] }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Student Name</div>
+                    <div class="value">{{ student[2] }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Department</div>
+                    <div class="value">{{ student[3] }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Year</div>
+                    <div class="value">{{ student[4] }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Examination</div>
+                    <div class="value">{{ student[5] }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Hall</div>
+                    <div class="value">{{ student[6] }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Room No</div>
+                    <div class="value">{{ student[7] }}</div>
+                </div>
+
+                <div class="seat-box">
+                    <small>YOUR ALLOCATED SEAT</small>
+                    <div class="seat-number">
+                        {{ student[9] }}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="qr-section">
+
+                <img src="{{ qr_url }}" alt="QR Hall Ticket">
+
+                <h3>Scan QR Code</h3>
+
+                <p>
+                    Scan this QR code to verify
+                    the examination hall ticket.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>
+                Please carry this hall ticket to the examination hall.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="buttons">
+
+        <a href="/dashboard" class="btn dashboard-btn">
+            ← Back to Dashboard
+        </a>
+
+        <button onclick="window.print()" class="btn print-btn">
+            🖨 Print Hall Ticket
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>

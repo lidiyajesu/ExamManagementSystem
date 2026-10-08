@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invigilator Hall Assignment</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #1e293b;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .edit {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .edit:hover {
+            text-decoration: underline;
+        }
+
+        .delete {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .delete:hover {
+            text-decoration: underline;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Invigilator Hall Assignment</h1>
+</div>
+
+<div class="container">
+
+    <!-- ASSIGN FORM -->
+
+    <div class="box">
+
+        <h2>Assign Invigilator to Hall</h2>
+
+        {% if message %}
+            <div class="message {{ message_type }}">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <form action="/add_assignment" method="POST">
+
+            <label>Select Invigilator</label>
+
+            <select name="invigilator_id" required>
+
+                <option value="">-- Select Invigilator --</option>
+
+                {% for invigilator in invigilators %}
+
+                    <option value="{{ invigilator[0] }}">
+                        {{ invigilator[1] }} - {{ invigilator[2] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <label>Select Examination Hall</label>
+
+            <select name="hall_id" required>
+
+                <option value="">-- Select Hall --</option>
+
+                {% for hall in halls %}
+
+                    <option value="{{ hall[0] }}">
+                        {{ hall[1] }} - Room {{ hall[2] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button type="submit">
+                Assign Invigilator
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ASSIGNMENT TABLE -->
+
+    <div class="box">
+
+        <h2>Assigned Invigilators</h2>
+
+        {% if assignments %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Invigilator Name</th>
+                    <th>Employee ID</th>
+                    <th>Hall</th>
+                    <th>Room No</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for assignment in assignments %}
+
+                <tr>
+
+                    <td>
+                        {{ assignment[0] }}
+                    </td>
+
+                    <td>
+                        {{ assignment[1] }}
+                    </td>
+
+                    <td>
+                        {{ assignment[2] }}
+                    </td>
+
+                    <td>
+                        {{ assignment[3] }}
+                    </td>
+
+                    <td>
+                        {{ assignment[4] }}
+                    </td>
+
+                    <td>
+
+                        <a
+                            class="edit"
+                            href="/edit_assignment/{{ assignment[0] }}"
+                        >
+                            Edit
+                        </a>
+
+                        &nbsp; | &nbsp;
+
+                        <a
+                            class="delete"
+                            href="/delete_assignment/{{ assignment[0] }}"
+                            onclick="return confirm('Are you sure you want to delete this assignment?')"
+                        >
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <p>No invigilators assigned yet.</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- BACK TO DASHBOARD -->
+
+    <a class="back" href="/dashboard">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

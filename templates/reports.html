@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Examination Reports</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #111827, #26354d);
+            color: white;
+            padding: 25px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .dashboard-btn {
+            background: white;
+            color: #172033;
+        }
+
+        .print-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .container {
+            padding: 30px 35px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            border: 1px solid #e5e7eb;
+        }
+
+        .summary-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .summary-title {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .summary-value {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+        }
+
+        .section-header span {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #475569;
+            text-align: left;
+            padding: 14px;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .progress-box {
+            width: 150px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-full {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status-available {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-empty {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .report-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .info-card {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .info-card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .header-buttons {
+                display: none;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .footer {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .report-info {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>📊 Examination Reports</h1>
+
+            <p>
+                Automated Examination Hall Allocation and
+                Management System
+            </p>
+
+        </div>
+
+        <div class="header-buttons">
+
+            <button
+                class="btn print-btn"
+                onclick="window.print()">
+
+                🖨️ Print Report
+
+            </button>
+
+            <a
+                href="/dashboard"
+                class="btn dashboard-btn">
+
+                ← Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    👨‍🎓
+                </div>
+
+                <div class="summary-title">
+                    Total Students
+                </div>
+
+                <div class="summary-value">
+                    {{ total_students }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    🏫
+                </div>
+
+                <div class="summary-title">
+                    Total Halls
+                </div>
+
+                <div class="summary-value">
+                    {{ total_halls }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    💺
+                </div>
+
+                <div class="summary-title">
+                    Allocated Seats
+                </div>
+
+                <div class="summary-value">
+                    {{ allocated_seats }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    🪑
+                </div>
+
+                <div class="summary-title">
+                    Empty Seats
+                </div>
+
+                <div class="summary-value">
+                    {{ empty_seats }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    👨‍🏫
+                </div>
+
+                <div class="summary-title">
+                    Invigilators
+                </div>
+
+                <div class="summary-value">
+                    {{ total_invigilators }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- EXAM OVERVIEW -->
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>📋 Exam Overview</h2>
+
+                    <span>
+                        Current examination system statistics
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="report-info">
+
+
+                <div class="info-card">
+
+                    <h3>Total Hall Capacity</h3>
+
+                    <p>
+                        {{ total_capacity }} Seats
+                    </p>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <h3>Seat Utilization</h3>
+
+                    <p>
+
+                        {% if total_capacity > 0 %}
+
+                            {{ ((allocated_seats / total_capacity) * 100)|round(1) }}%
+
+                        {% else %}
+
+                            0%
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <h3>System Status</h3>
+
+                    <p>
+                        🟢 Online
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- HALL REPORT -->
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>🏫 Hall-wise Allocation Report</h2>
+
+                    <span>
+                        Seat allocation and occupancy status
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Hall
+                        </th>
+
+                        <th>
+                            Room No
+                        </th>
+
+                        <th>
+                            Capacity
+                        </th>
+
+                        <th>
+                            Allocated
+                        </th>
+
+                        <th>
+                            Occupancy
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for report in hall_reports %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ report[0] }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            Room {{ report[1] }}
+                        </td>
+
+                        <td>
+                            {{ report[2] }}
+                        </td>
+
+                        <td>
+                            {{ report[3] }}
+                        </td>
+
+                        <td>
+
+                            {% if report[2] > 0 %}
+
+                                {% set percentage =
+                                ((report[3] / report[2]) * 100)|round(1) %}
+
+                            {% else %}
+
+                                {% set percentage = 0 %}
+
+                            {% endif %}
+
+
+                            <div class="progress-box">
+
+                                <div class="progress">
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width: {{ percentage }}%;">
+                                    </div>
+
+                                </div>
+
+                                <small>
+                                    {{ percentage }}%
+                                </small>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if report[3] == report[2] %}
+
+                                <span class="status status-full">
+                                    FULL
+                                </span>
+
+                            {% elif report[3] == 0 %}
+
+                                <span class="status status-empty">
+                                    EMPTY
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-available">
+                                    AVAILABLE
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="6"
+                            style="text-align:center;padding:30px;">
+
+                            No hall data available.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- REPORT SUMMARY -->
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>📈 Allocation Summary</h2>
+
+                    <span>
+                        Overall examination seating status
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="report-info">
+
+
+                <div class="info-card">
+
+                    <h3>Students Allocated</h3>
+
+                    <p>
+                        {{ allocated_seats }} / {{ total_students }}
+                    </p>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <h3>Available Seats</h3>
+
+                    <p>
+                        {{ empty_seats }}
+                    </p>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <h3>Hall Utilization</h3>
+
+                    <p>
+
+                        {% if total_capacity > 0 %}
+
+                            {{ ((allocated_seats / total_capacity) * 100)|round(1) }}%
+
+                        {% else %}
+
+                            0%
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        Automated Examination Hall Allocation and
+        Management System © 2026
+
+    </div>
+
+
+</body>
+
+</html>

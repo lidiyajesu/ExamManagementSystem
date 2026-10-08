@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Hall Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .topbar {
+            background: #111827;
+            color: white;
+            padding: 18px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            font-size: 24px;
+        }
+
+        .dashboard-btn {
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+        }
+
+        .dashboard-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .container {
+            padding: 30px;
+
+            max-width: 1500px;
+
+            margin: auto;
+        }
+
+        /* MESSAGE */
+
+        .message {
+            padding: 15px 20px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            border-left: 5px solid #dc2626;
+
+            font-weight: bold;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: flex;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+            flex-wrap: wrap;
+        }
+
+        .summary-box {
+            background: white;
+
+            padding: 18px 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.06);
+
+            min-width: 180px;
+        }
+
+        .summary-box span {
+            display: block;
+
+            font-size: 13px;
+
+            color: #6b7280;
+
+            margin-bottom: 5px;
+        }
+
+        .summary-box strong {
+            font-size: 24px;
+
+            color: #111827;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+
+            font-size: 20px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 12px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+
+            border-color: #2563eb;
+        }
+
+        .add-btn {
+            background: #16a34a;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+        .add-btn:hover {
+            background: #15803d;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1100px;
+        }
+
+        th {
+            background: #111827;
+
+            color: white;
+
+            padding: 14px;
+
+            text-align: left;
+
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            vertical-align: top;
+
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* BADGES */
+
+        .badge {
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        .assigned {
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .not-assigned {
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+        /* STUDENTS */
+
+        .student-list {
+            max-height: 220px;
+
+            overflow-y: auto;
+
+            min-width: 260px;
+        }
+
+        .student-item {
+            background: #f3f4f6;
+
+            border-radius: 8px;
+
+            padding: 9px 11px;
+
+            margin-bottom: 7px;
+
+            border-left:
+                3px solid #2563eb;
+        }
+
+        .student-name {
+            font-weight: bold;
+
+            color: #111827;
+        }
+
+        .student-details {
+            font-size: 12px;
+
+            color: #6b7280;
+
+            margin-top: 4px;
+        }
+
+        .empty {
+            color: #9ca3af;
+
+            font-style: italic;
+        }
+
+        /* CAPACITY */
+
+        .capacity {
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+        /* BUTTONS */
+
+        .edit-btn {
+            background: #f59e0b;
+
+            color: white;
+
+            padding: 7px 12px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            margin-right: 5px;
+
+            display: inline-block;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+
+            color: white;
+
+            padding: 7px 12px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            display: inline-block;
+        }
+
+        .edit-btn:hover {
+            background: #d97706;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .topbar {
+                padding: 15px;
+            }
+
+            .topbar h1 {
+                font-size: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- TOP BAR -->
+
+<div class="topbar">
+
+    <h1>
+        🏫 Hall Management
+    </h1>
+
+    <a
+        href="/dashboard"
+        class="dashboard-btn"
+    >
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- ERROR / SUCCESS MESSAGE -->
+
+    {% if message %}
+
+        <div class="message">
+
+            ⚠️ {{ message }}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+        <div class="summary-box">
+
+            <span>
+                Total Halls
+            </span>
+
+            <strong>
+                {{ halls|length }}
+            </strong>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <span>
+                Total Capacity
+            </span>
+
+            <strong>
+
+                {% set total_capacity =
+                    namespace(value=0)
+                %}
+
+                {% for hall in halls %}
+
+                    {% set total_capacity.value =
+                        total_capacity.value + hall[3]
+                    %}
+
+                {% endfor %}
+
+                {{ total_capacity.value }}
+
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD HALL -->
+
+    <div class="card">
+
+        <h2>
+            ➕ Add Examination Hall
+        </h2>
+
+        <form
+            action="/add_hall"
+            method="POST"
+        >
+
+            <div class="form-grid">
+
+                <input
+                    type="text"
+                    name="hall_name"
+                    placeholder="Hall Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="room_no"
+                    placeholder="Room Number"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="capacity"
+                    placeholder="Capacity"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+            <br>
+
+            <button
+                type="submit"
+                class="add-btn"
+            >
+                + Add Hall
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- HALL DETAILS -->
+
+    <div class="card">
+
+        <h2>
+            📋 Examination Hall Details
+        </h2>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Hall Name
+                        </th>
+
+                        <th>
+                            Room No
+                        </th>
+
+                        <th>
+                            Capacity
+                        </th>
+
+                        <th>
+                            Assigned Invigilator
+                        </th>
+
+                        <th>
+                            Students in Hall
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for hall in halls %}
+
+                    <tr>
+
+
+                        <!-- ID -->
+
+                        <td>
+                            {{ hall[0] }}
+                        </td>
+
+
+                        <!-- HALL NAME -->
+
+                        <td>
+
+                            <strong>
+                                {{ hall[1] }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- ROOM -->
+
+                        <td>
+
+                            <strong>
+                                {{ hall[2] }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- CAPACITY -->
+
+                        <td>
+
+                            <span class="capacity">
+                                {{ hall[3] }}
+                            </span>
+
+                            seats
+
+                        </td>
+
+
+                        <!-- INVIGILATOR -->
+
+                        <td>
+
+                            {% if hall[4] %}
+
+                                <span class="badge assigned">
+                                    Assigned
+                                </span>
+
+                                <br>
+                                <br>
+
+                                <strong>
+                                    👨‍🏫 {{ hall[4] }}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    Employee ID:
+                                    {{ hall[5] }}
+                                </small>
+
+                            {% else %}
+
+                                <span class="badge not-assigned">
+                                    Not Assigned
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- STUDENTS -->
+
+                        <td>
+
+                            {% if hall[0] in hall_students %}
+
+
+                                <div class="student-list">
+
+
+                                {% for student in
+                                   hall_students[hall[0]] %}
+
+
+                                    <div class="student-item">
+
+
+                                        <div class="student-name">
+
+                                            🎓
+                                            {{ student.student_name }}
+
+                                        </div>
+
+
+                                        <div class="student-details">
+
+                                            Register No:
+                                            <strong>
+                                                {{ student.register_no }}
+                                            </strong>
+
+                                            <br>
+
+                                            Seat:
+                                            <strong>
+                                                {{ student.seat_no }}
+                                            </strong>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                {% endfor %}
+
+
+                                </div>
+
+
+                            {% else %}
+
+
+                                <span class="empty">
+
+                                    No students allocated
+
+                                </span>
+
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <a
+                                href="/edit_hall/{{ hall[0] }}"
+                                class="edit-btn"
+                            >
+                                Edit
+                            </a>
+
+
+                            <a
+                                href="/delete_hall/{{ hall[0] }}"
+                                class="delete-btn"
+                                onclick="
+                                return confirm(
+                                'Are you sure you want to delete this hall?'
+                                );
+                                "
+                            >
+                                Delete
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% else %}
+
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            style="text-align:center;"
+                        >
+
+                            No examination halls available.
+
+                        </td>
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

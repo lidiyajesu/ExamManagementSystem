@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Management Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            background: #2563eb;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            margin: auto;
+        }
+
+        .logo h2 {
+            margin-top: 12px;
+            font-size: 18px;
+        }
+
+        .logo p {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .menu-title {
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 20px 10px 10px;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 12px 13px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .welcome p {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .admin-box {
+            background: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            font-size: 14px;
+        }
+
+        /* STATISTICS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #eef2f7;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .blue {
+            background: #dbeafe;
+        }
+
+        .green {
+            background: #dcfce7;
+        }
+
+        .purple {
+            background: #ede9fe;
+        }
+
+        .orange {
+            background: #ffedd5;
+        }
+
+        .stat-card h3 {
+            font-size: 30px;
+            margin-top: 15px;
+            color: #111827;
+        }
+
+        .stat-card p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        /* MODULES */
+
+        .section-title {
+            font-size: 19px;
+            margin-bottom: 15px;
+            color: #111827;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            border: 1px solid #eef2f7;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.09);
+        }
+
+        .module-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            margin-bottom: 15px;
+        }
+
+        .module-card h3 {
+            font-size: 17px;
+            margin-bottom: 7px;
+        }
+
+        .module-card p {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+            min-height: 40px;
+        }
+
+        .module-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 9px 15px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .module-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* AI CARD */
+
+        .ai-card {
+            background: linear-gradient(135deg, #111827, #1d4ed8);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-card p {
+            color: #dbeafe;
+        }
+
+        .ai-card .module-icon {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .ai-card .module-btn {
+            background: white;
+            color: #1d4ed8;
+        }
+
+        .ai-card .module-btn:hover {
+            background: #dbeafe;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .robot {
+            position: absolute;
+            right: 18px;
+            top: 15px;
+            font-size: 50px;
+        }
+
+        /* SYSTEM STATUS */
+
+        .status-box {
+            background: white;
+            margin-top: 25px;
+            padding: 22px;
+            border-radius: 15px;
+            border: 1px solid #eef2f7;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .status-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .status-item span {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .status-item strong {
+            font-size: 17px;
+        }
+
+        .online {
+            color: #16a34a;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modules {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 700px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .logo h2,
+            .logo p,
+            .menu-title,
+            .nav-link span {
+                display: none;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+                padding: 20px;
+            }
+
+            .stats,
+            .modules,
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🎓
+            </div>
+
+            <h2>ExamManager</h2>
+
+            <p>Smart Examination System</p>
+
+        </div>
+
+
+        <div class="menu-title">
+            Main Menu
+        </div>
+
+
+        <a href="/dashboard" class="nav-link active">
+
+            <div class="nav-icon">
+                🏠
+            </div>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="/students" class="nav-link">
+
+            <div class="nav-icon">
+                👨‍🎓
+            </div>
+
+            <span>
+                Students
+            </span>
+
+        </a>
+
+
+        <a href="/halls" class="nav-link">
+
+            <div class="nav-icon">
+                🏫
+            </div>
+
+            <span>
+                Hall Management
+            </span>
+
+        </a>
+
+
+        <a href="/seat_allocation" class="nav-link">
+
+            <div class="nav-icon">
+                💺
+            </div>
+
+            <span>
+                Seat Allocation
+            </span>
+
+        </a>
+
+
+        <!-- INTELLIGENCE -->
+
+        <div class="menu-title">
+            Intelligence
+        </div>
+
+
+        <a href="/ai_seating" class="nav-link">
+
+            <div class="nav-icon">
+                🤖
+            </div>
+
+            <span>
+                AI Seating Intelligence
+            </span>
+
+        </a>
+
+
+        <!-- STAFF -->
+
+        <div class="menu-title">
+            Staff Management
+        </div>
+
+
+        <a href="/invigilators" class="nav-link">
+
+            <div class="nav-icon">
+                👨‍🏫
+            </div>
+
+            <span>
+                Invigilators
+            </span>
+
+        </a>
+
+
+        <a href="/assign_invigilator" class="nav-link">
+
+            <div class="nav-icon">
+                📋
+            </div>
+
+            <span>
+                Hall Assignment
+            </span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="welcome">
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Automated Examination Hall Allocation & Management System
+                </p>
+
+            </div>
+
+
+            <div class="admin-box">
+
+                👤 <strong>
+                    Administrator
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="stats">
+
+
+            <!-- TOTAL STUDENTS -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+                        <p>
+                            Total Students
+                        </p>
+                    </div>
+
+                    <div class="stat-icon blue">
+                        👨‍🎓
+                    </div>
+
+                </div>
+
+                <h3>
+                    {{ total_students }}
+                </h3>
+
+                <p>
+                    Registered students
+                </p>
+
+            </div>
+
+
+            <!-- TOTAL HALLS -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+                        <p>
+                            Total Halls
+                        </p>
+                    </div>
+
+                    <div class="stat-icon green">
+                        🏫
+                    </div>
+
+                </div>
+
+                <h3>
+                    {{ total_halls }}
+                </h3>
+
+                <p>
+                    Available examination halls
+                </p>
+
+            </div>
+
+
+            <!-- INVIGILATORS -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+                        <p>
+                            Invigilators
+                        </p>
+                    </div>
+
+                    <div class="stat-icon purple">
+                        👨‍🏫
+                    </div>
+
+                </div>
+
+                <h3>
+                    {{ total_invigilators }}
+                </h3>
+
+                <p>
+                    Registered invigilators
+                </p>
+
+            </div>
+
+
+            <!-- ALLOCATED SEATS -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+                        <p>
+                            Allocated Seats
+                        </p>
+                    </div>
+
+                    <div class="stat-icon orange">
+                        💺
+                    </div>
+
+                </div>
+
+                <h3>
+                    {{ allocated_seats }}
+                </h3>
+
+                <p>
+                    Seats currently allocated
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM MODULES -->
+
+        <h2 class="section-title">
+            System Modules
+        </h2>
+
+
+        <div class="modules">
+
+
+            <!-- STUDENT MANAGEMENT -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    👨‍🎓
+                </div>
+
+                <h3>
+                    Student Management
+                </h3>
+
+                <p>
+                    Add, edit, view and delete student examination details.
+                </p>
+
+                <a href="/students" class="module-btn">
+                    Open Students →
+                </a>
+
+            </div>
+
+
+            <!-- HALL MANAGEMENT -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    🏫
+                </div>
+
+                <h3>
+                    Hall Management
+                </h3>
+
+                <p>
+                    Manage examination halls, room numbers and capacities.
+                </p>
+
+                <a href="/halls" class="module-btn">
+                    Open Halls →
+                </a>
+
+            </div>
+
+
+            <!-- SEAT ALLOCATION -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    💺
+                </div>
+
+                <h3>
+                    Automatic Seat Allocation
+                </h3>
+
+                <p>
+                    Automatically allocate students to available halls and seats.
+                </p>
+
+                <a href="/seat_allocation" class="module-btn">
+                    Allocate Seats →
+                </a>
+
+            </div>
+
+
+            <!-- AI SEATING -->
+
+            <div class="module-card ai-card">
+
+                <div class="robot">
+                    🤖
+                </div>
+
+                <div class="ai-badge">
+                    🧠 AI POWERED
+                </div>
+
+                <div class="module-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    AI Seating Intelligence
+                </h3>
+
+                <p>
+                    Analyze hall capacity, student distribution and
+                    seating allocation using smart examination intelligence.
+                </p>
+
+                <a href="/ai_seating" class="module-btn">
+                    Open AI Intelligence →
+                </a>
+
+            </div>
+
+
+            <!-- WHERE SHOULD I SIT -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    🔎
+                </div>
+
+                <h3>
+                    Where Should I Sit?
+                </h3>
+
+                <p>
+                    Search a student's register number and instantly find
+                    the assigned examination hall, room and seat.
+                </p>
+
+                <a href="/student_search" class="module-btn">
+                    Find My Seat →
+                </a>
+
+            </div>
+
+
+            <!-- INVIGILATOR MANAGEMENT -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    👨‍🏫
+                </div>
+
+                <h3>
+                    Invigilator Management
+                </h3>
+
+                <p>
+                    Maintain invigilator information and staff details.
+                </p>
+
+                <a href="/invigilators" class="module-btn">
+                    Manage Staff →
+                </a>
+
+            </div>
+
+
+            <!-- HALL ASSIGNMENT -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    📋
+                </div>
+
+                <h3>
+                    Hall Assignment
+                </h3>
+
+                <p>
+                    Assign invigilators to examination halls and manage assignments.
+                </p>
+
+                <a href="/assign_invigilator" class="module-btn">
+                    Assign Hall →
+                </a>
+
+            </div>
+
+
+            <!-- EXAM REPORTS -->
+
+<div class="module-card">
+
+    <div class="module-icon">
+        📊
+    </div>
+
+    <h3>
+        Exam Reports
+    </h3>
+
+    <p>
+        View exam statistics, hall-wise allocation,
+        occupancy and examination reports.
+    </p>
+
+    <a href="/reports" class="module-btn">
+        View Reports →
+    </a>
+
+</div>
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="status-box">
+
+            <h2 class="section-title">
+                System Overview
+            </h2>
+
+
+            <div class="status-grid">
+
+
+                <div class="status-item">
+
+                    <span>
+                        Total Hall Capacity
+                    </span>
+
+                    <strong>
+                        {{ total_capacity }} Seats
+                    </strong>
+
+                </div>
+
+
+                <div class="status-item">
+
+                    <span>
+                        Invigilator Assignments
+                    </span>
+
+                    <strong>
+                        {{ assigned_halls }}
+                    </strong>
+
+                </div>
+
+
+                <div class="status-item">
+
+                    <span>
+                        System Status
+                    </span>
+
+                    <strong class="online">
+                        ● Online
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+</body>
+</html>

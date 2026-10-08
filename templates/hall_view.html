@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Live Exam Hall View</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #111827, #312e81);
+            color: white;
+            padding: 25px 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: #c7d2fe;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .top-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .top-card h2 {
+            margin-bottom: 18px;
+            color: #312e81;
+        }
+
+        .hall-form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            flex: 1;
+            min-width: 250px;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3730a3;
+        }
+
+        .hall-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+
+        .info-box .number {
+            font-size: 27px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin-bottom: 5px;
+        }
+
+        .info-box .label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .seat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .seat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .seat-header h2 {
+            color: #1e293b;
+        }
+
+        .legend {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 14px;
+        }
+
+        .legend-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+        }
+
+        .allocated {
+            background: #22c55e;
+        }
+
+        .empty {
+            background: #e2e8f0;
+        }
+
+        .teacher {
+            width: 100%;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 14px;
+        }
+
+        .seat {
+            min-height: 90px;
+            border-radius: 14px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .seat:hover {
+            transform: translateY(-4px);
+        }
+
+        .seat.occupied {
+            background: #dcfce7;
+            border-color: #22c55e;
+        }
+
+        .seat.vacant {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #94a3b8;
+        }
+
+        .seat-number {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .student-name {
+            font-size: 12px;
+            font-weight: bold;
+            color: #166534;
+        }
+
+        .register-no {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        .empty-text {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .student-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .popup-box {
+            width: 420px;
+            max-width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .popup-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .popup-box h2 {
+            color: #312e81;
+            margin-bottom: 20px;
+        }
+
+        .detail {
+            text-align: left;
+            background: #f8fafc;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            margin-top: 15px;
+            background: #ef4444;
+        }
+
+        .close-btn:hover {
+            background: #dc2626;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+            .seat-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .hall-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .seat-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .seat {
+                min-height: 75px;
+            }
+
+            .hall-info {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🏫 Live Exam Hall View</h1>
+    <p>Visual Examination Seating & Hall Monitoring System</p>
+</div>
+
+<div class="container">
+
+    <div class="top-card">
+        <h2>🔎 Select Examination Hall</h2>
+
+        <form method="GET" action="/hall_view" class="hall-form">
+
+            <select name="hall_id" required>
+
+                <option value="">-- Select Hall --</option>
+
+                {% for hall in halls %}
+
+                    <option value="{{ hall[0] }}"
+                        {% if selected_hall and selected_hall[0] == hall[0] %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ hall[1] }} - Room {{ hall[2] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <button type="submit">
+                View Hall
+            </button>
+
+        </form>
+    </div>
+
+
+    {% if selected_hall %}
+
+    <div class="hall-info">
+
+        <div class="info-box">
+            <div class="number">
+                {{ selected_hall[1] }}
+            </div>
+            <div class="label">
+                Hall Name
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="number">
+                {{ selected_hall[2] }}
+            </div>
+            <div class="label">
+                Room Number
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="number">
+                {{ selected_hall[3] }}
+            </div>
+            <div class="label">
+                Total Capacity
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="number">
+                {{ allocated_count }}
+            </div>
+            <div class="label">
+                Allocated Students
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="seat-card">
+
+        <div class="seat-header">
+
+            <h2>💺 Seat Layout</h2>
+
+            <div class="legend">
+
+                <div class="legend-item">
+                    <div class="legend-box allocated"></div>
+                    Allocated
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-box empty"></div>
+                    Empty
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="teacher">
+            👨‍🏫 Examination Hall — {{ selected_hall[1] }}
+        </div>
+
+
+        <div class="seat-grid">
+
+            {% for seat in seats %}
+
+                {% if seat.student_name %}
+
+                <div
+                    class="seat occupied"
+                    onclick="showStudent(
+                        '{{ seat.seat_no }}',
+                        '{{ seat.register_no }}',
+                        '{{ seat.student_name }}',
+                        '{{ seat.department }}'
+                    )"
+                >
+
+                    <div class="seat-number">
+                        💺 {{ seat.seat_no }}
+                    </div>
+
+                    <div class="student-name">
+                        {{ seat.student_name }}
+                    </div>
+
+                    <div class="register-no">
+                        {{ seat.register_no }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="seat vacant">
+
+                    <div class="seat-number">
+                        💺 {{ seat.seat_no }}
+                    </div>
+
+                    <div class="empty-text">
+                        Empty
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <a href="/dashboard" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+
+<div class="student-popup" id="studentPopup">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">
+            👨‍🎓
+        </div>
+
+        <h2>Student Seat Details</h2>
+
+        <div class="detail">
+            <strong>Seat:</strong>
+            <span id="popupSeat"></span>
+        </div>
+
+        <div class="detail">
+            <strong>Register No:</strong>
+            <span id="popupRegister"></span>
+        </div>
+
+        <div class="detail">
+            <strong>Student Name:</strong>
+            <span id="popupName"></span>
+        </div>
+
+        <div class="detail">
+            <strong>Department:</strong>
+            <span id="popupDepartment"></span>
+        </div>
+
+        <button class="close-btn" onclick="closePopup()">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function showStudent(seat, registerNo, name, department) {
+
+    document.getElementById("popupSeat").innerText = seat;
+
+    document.getElementById("popupRegister").innerText = registerNo;
+
+    document.getElementById("popupName").innerText = name;
+
+    document.getElementById("popupDepartment").innerText = department;
+
+    document.getElementById("studentPopup").style.display = "flex";
+}
+
+
+function closePopup() {
+
+    document.getElementById("studentPopup").style.display = "none";
+
+}
+
+
+document.getElementById("studentPopup").addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === this) {
+            closePopup();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

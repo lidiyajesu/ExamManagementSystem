@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Invigilator QR Verification</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 430px;
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 5px 0;
+            color: #172554;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .qr-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .qr-box img {
+            width: 220px;
+            height: 220px;
+        }
+
+        .details {
+            text-align: left;
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .details p {
+            margin: 9px 0;
+            color: #334155;
+        }
+
+        .details strong {
+            color: #0f172a;
+        }
+
+        .verified {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .buttons {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button,
+        a {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .back-btn {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .buttons {
+                display: none;
+            }
+
+            .card {
+                box-shadow: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="icon">
+            👨‍🏫
+        </div>
+
+        <h1>
+            Invigilator Verification
+        </h1>
+
+        <div class="subtitle">
+            Official Examination Invigilator QR
+        </div>
+
+        <div class="qr-box">
+
+            <img src="{{ qr_url }}"
+                 alt="Invigilator QR Code">
+
+        </div>
+
+        <div class="details">
+
+            <p>
+                <strong>Name:</strong>
+                {{ invigilator[1] }}
+            </p>
+
+            <p>
+                <strong>Employee ID:</strong>
+                {{ invigilator[2] }}
+            </p>
+
+            <p>
+                <strong>Department:</strong>
+                {{ invigilator[3] }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ invigilator[4] }}
+            </p>
+
+            <p>
+                <strong>Hall:</strong>
+                {{ invigilator[5] or "Not Assigned" }}
+            </p>
+
+            <p>
+                <strong>Room No:</strong>
+                {{ invigilator[6] or "Not Assigned" }}
+            </p>
+
+        </div>
+
+        <div class="verified">
+            ✅ Invigilator Identity Verified
+        </div>
+
+        <div class="buttons">
+
+            <button class="print-btn"
+                    onclick="window.print()">
+                🖨️ Print QR
+            </button>
+
+            <a href="/invigilators"
+               class="back-btn">
+                ← Back
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

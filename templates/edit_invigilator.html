@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Edit Invigilator</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 30px auto;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>Edit Invigilator</h1>
+
+</div>
+
+
+<div class="container">
+
+    <div class="box">
+
+        <h2>Update Invigilator Details</h2>
+
+
+        <form
+            action="/update_invigilator/{{ invigilator[0] }}"
+            method="POST"
+        >
+
+
+            <label>Invigilator Name</label>
+
+            <input
+                type="text"
+                name="name"
+                value="{{ invigilator[1] }}"
+                required
+            >
+
+
+            <label>Employee ID</label>
+
+            <input
+                type="text"
+                name="employee_id"
+                value="{{ invigilator[2] }}"
+                required
+            >
+
+
+            <label>Department</label>
+
+            <input
+                type="text"
+                name="department"
+                value="{{ invigilator[3] }}"
+                required
+            >
+
+
+            <label>Phone Number</label>
+
+            <input
+                type="text"
+                name="phone"
+                value="{{ invigilator[4] }}"
+            >
+
+
+            <button type="submit">
+                Update Invigilator
+            </button>
+
+
+        </form>
+
+
+        <a
+            class="back"
+            href="/invigilators"
+        >
+            ← Back to Invigilator Management
+        </a>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

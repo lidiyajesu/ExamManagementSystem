@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Student</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 30px auto;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #ddd;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .back {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Edit Student</h1>
+</div>
+
+<div class="container">
+
+    <div class="box">
+
+        <h2>Update Student Details</h2>
+
+        <form action="/update_student/{{ student[0] }}" method="POST">
+
+            <label>Register Number</label>
+            <input
+                type="text"
+                name="register_no"
+                value="{{ student[1] }}"
+                required
+            >
+
+            <label>Student Name</label>
+            <input
+                type="text"
+                name="student_name"
+                value="{{ student[2] }}"
+                required
+            >
+
+            <label>Department</label>
+            <input
+                type="text"
+                name="department"
+                value="{{ student[3] }}"
+                required
+            >
+
+            <label>Year</label>
+
+            <select name="year" required>
+                <option value="1" {% if student[4] == 1 %}selected{% endif %}>
+                    1st Year
+                </option>
+
+                <option value="2" {% if student[4] == 2 %}selected{% endif %}>
+                    2nd Year
+                </option>
+
+                <option value="3" {% if student[4] == 3 %}selected{% endif %}>
+                    3rd Year
+                </option>
+            </select>
+
+            <label>Exam Name</label>
+
+            <input
+                type="text"
+                name="exam_name"
+                value="{{ student[5] }}"
+                required
+            >
+
+            <button type="submit">
+                Update Student
+            </button>
+
+        </form>
+
+        <a class="back" href="/students">
+            ← Back to Student Management
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
