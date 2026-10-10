@@ -1,18 +1,40 @@
-from flask import Flask, render_template, request
-from flask_mysqldb import MySQL
+from flask import Flask, render_template, request, g
 import os
+import psycopg2
 import qrcode
 import io
 import base64
 
 app = Flask(__name__)
 
-app.config["MYSQL_HOST"] = os.environ.get("MYSQLHOST")
-app.config["MYSQL_USER"] = os.environ.get("MYSQLUSER")
-app.config["MYSQL_PASSWORD"] = os.environ.get("MYSQLPASSWORD")
-app.config["MYSQL_DB"] = os.environ.get("MYSQLDATABASE")
 
-mysql = MySQL(app)
+class Database:
+    @property
+    def connection(self):
+        if "db_connection" not in g:
+            database_url = os.environ.get("DATABASE_URL")
+
+            if not database_url:
+                raise RuntimeError("DATABASE_URL is not configured")
+
+            g.db_connection = psycopg2.connect(
+                database_url,
+                sslmode="require"
+            )
+
+        return g.db_connection
+
+
+mysql = Database()
+
+
+@app.teardown_appcontext
+def close_db_connection(error=None):
+    connection = g.pop("db_connection", None)
+
+    if connection is not None:
+        connection.close()
+
 
 
 # =========================
