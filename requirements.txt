@@ -1,5 +1,6 @@
 Flask
 Flask-MySQLdb
+psycopg2-binary
 qrcode
 Pillow
 gunicorn
